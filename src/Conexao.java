@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Conexao {
-	
+
 	private String usuario = "testeback2017";
 	private String senha = "testeback2017!";
 	private String banco = "testeback2017";
@@ -14,79 +14,60 @@ public class Conexao {
 	public String query;
 	private Statement stmt;
 	private Connection conexao;
-	
-	public boolean abrirConexao()
-	{
+
+	public boolean abrirConexao() {
 		boolean situacao = false;
-		
-		//Verifica drive
-		try
-		{
+
+		// Verifica drive
+		try {
 			Class.forName("net.sourceforge.jtds.jdbc.Driver");
 			situacao = true;
-		}catch (Exception ex)
-		{
+		} catch (Exception ex) {
 			situacao = false;
-			System.out.println("Erro no drive: "+ex);
+			System.out.println("Erro no drive: " + ex);
 		}
-		
-		//Verifica conexão com bd
-		try
-		{
-			conexao = DriverManager.getConnection("jdbc:jtds:sqlserver://"+server+"/"+banco+"",usuario,senha);
+
+		// Verifica conexão com bd
+		try {
+			conexao = DriverManager.getConnection("jdbc:jtds:sqlserver://" + server + "/" + banco + "", usuario, senha);
 			stmt = conexao.createStatement();
 			situacao = true;
-		}
-		catch (SQLException ex)
-		{
+		} catch (SQLException ex) {
 			situacao = false;
-			System.out.println("Erro ao conectar com banco: "+ex);
+			System.out.println("Erro ao conectar com banco: " + ex);
 		}
-		
+
 		return situacao;
 	}
-	
-	public ResultSet consultaBD(String query)
-	{
+
+	public ResultSet consultaBD(String query) {
 		ResultSet rs = null;
-		if(abrirConexao())
-		{
-			try
-			{
+		if (abrirConexao()) {
+			try {
 				rs = stmt.executeQuery(query);
-			}
-			catch (Exception ex)
-			{
+			} catch (Exception ex) {
 				System.out.println(ex);
 			}
-		}
-		else
-		{
+		} else {
 			System.out.print("Erro ao conectar no banco de dados.");
-			
+
 		}
 		return rs;
 	}
-	
-	public int executaBD (String query)
-	{
+
+	public int executaBD(String query) {
 		int resultado = -1;
-		if(abrirConexao())
-		{
-			try
-			{
+		if (abrirConexao()) {
+			try {
 				resultado = stmt.executeUpdate(query);
-			}
-			catch (Exception ex)
-			{
+			} catch (Exception ex) {
 				System.out.println(ex);
 			}
 		}
 		return resultado;
 	}
-	
-	public void configurarConexao(String user, String password, String dataBase, String serverAddress)
-	{
+
+	public void configurarConexao(String user, String password, String dataBase, String serverAddress) {
 		usuario = user;
 		senha = password;
 		banco = dataBase;
